@@ -13,6 +13,7 @@ void main() {
 
     //test functions on empty tree
     printTreeInorder(&bst);
+    print_ascii_tree((bst.root));
     int result = findIndexNFromLast(&bst, N);
     if (result != -1) printf("%dth largest number: %d\n", N, result);
     (sameHeightLeaves(&bst)) ? printf("leaves are same height\n") : printf("leaves are not same height\n");
@@ -34,6 +35,7 @@ void main() {
 
     //print tree in order, lowest to highest
     printTreeInorder(&bst);
+    print_ascii_tree((bst.root));
     //print_ascii_tree((bst.root));
 
     //print the nth largest number in tree
