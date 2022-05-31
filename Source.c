@@ -3,7 +3,7 @@
 #include "TreePrintLibrary.h"
 #include <crtdbg.h>
 
-#define N 5
+#define N 8
 
 void main() {
 
@@ -32,6 +32,7 @@ void main() {
     insertBST(&bst, 8);
     insertBST(&bst, 8);
     insertBST(&bst, 9);
+    insertBST(&bst, 10);
 
     //print tree in order, lowest to highest
     printTreeInorder(&bst);

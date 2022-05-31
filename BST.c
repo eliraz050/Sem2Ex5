@@ -90,7 +90,7 @@ void destroyREC(TreeNode* root) {
 }
 
 int findIndexNFromLast(BST* bst, int N) {
-	int res, size;
+	int size;
 
 	//case tree is empty
 	if (bst->root == NULL) {
@@ -107,37 +107,31 @@ int findIndexNFromLast(BST* bst, int N) {
 		return -1;
 	}
 
-	//find index from largest number in recursive function
-	findIndexNFromLastREC(bst->root, &N, &res);
+	//find index from largest number in recursive function and return
+	return findIndexNFromLastREC(bst->root, N);
 
-	//return index
-	return res;
 }
 
-void findIndexNFromLastREC(TreeNode* root, int* num, int* res) {
-	//end condition
+int findIndexNFromLastREC(TreeNode* root, int N) {
+	// end condition
 	if (root == NULL) return;
+	 
+	// count number of branches in right tree and add 1 for the root.
+	int size = howManyInTree(root->right) + 1;
 
-	//reach bottom of tree
-	findIndexNFromLastREC(root->right, num, res);
-
-	//if our index has reached one, then we are at the nth largest node and save value
-	if (*num == 1) {
-		*res = root->element;
-		//(*num)--;
+	// return Nth highest number
+	if (size == N) {
+		return root->element;
 	}
 
-	//as we start to traverse back up, take the left branches as well
-	findIndexNFromLastREC(root->left, num, res);
-
-	//for every jump upward or to the left, decrement the index
-	(*num)--;
-
-	//again, if our index is one, we have reached the nth root
-	if (*num == 1) *res = root->element;
-
-	return;
-
+	// if more branches down then N means N is somewhere to the right
+	if (size > N) {
+		return findIndexNFromLastREC(root->right, N);
+	}
+	// if less branches down then N means is somwhere to the left
+	if (size < N) {
+		return findIndexNFromLastREC(root->left, N-size);
+	}
 
 }
 

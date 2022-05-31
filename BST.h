@@ -24,7 +24,7 @@ void inOrder(TreeNode* root);
 void destroyBST(BST* bst);
 void destroyREC(TreeNode* root);
 int findIndexNFromLast(BST* bst, int N);
-void findIndexNFromLastREC(TreeNode* root, int* num, int* res);
+int findIndexNFromLastREC(TreeNode* root, int N);
 int howManyInTree(TreeNode* root);
 int sameHeightLeaves(BST* bst);
 void sameHeightLeavesREC(TreeNode* root, int* num, int steps);
