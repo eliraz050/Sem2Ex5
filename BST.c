@@ -16,21 +16,21 @@ void insertBST(BST* bst, int value) {
 	//dynamically allocate new node, automatically sets left and right pointers to null
 	TreeNode* newNode = (TreeNode*)calloc(1, sizeof(TreeNode));
 
-	//checks that the allocation succeeded
+	//checks that the allocation succeeded using macro
 	CHECK_NULL(newNode);
-	
-	//set sent value to new node's element
+
+	//set value to new node's element
 	newNode->element = value;
 
 	// case empty tree
-	if (bst->root == NULL) { 
+	if (bst->root == NULL) {
 		//set root to new node
 		bst->root = newNode;
 		return;
 	}
 
-	//call to recursive function to add new node
-	insertRec(bst->root, newNode);		
+	//otherwise call to recursive function to add new node
+	insertRec(bst->root, newNode);
 }
 
 void insertRec(TreeNode* root, TreeNode* newNode) {
@@ -50,20 +50,22 @@ void insertRec(TreeNode* root, TreeNode* newNode) {
 }
 
 void printTreeInorder(BST* bst) {
-	
+
 	if (bst->root == NULL) { // case empty tree
-		printf("Tree is empty\n");
+		printf("Tree is empty, cannot print\n");
 		return;
 	}
 
 	//recursive in order print function
 	inOrder(bst->root);
 
+	printf("\n");
+
 }
 
 void inOrder(TreeNode* root) {
-
-	if (root != NULL) {	
+	//prints in order from lowest to highest
+	if (root != NULL) {
 		inOrder(root->left);
 		printf("%d ", root->element);
 		inOrder(root->right);
@@ -71,7 +73,7 @@ void inOrder(TreeNode* root) {
 }
 
 void destroyBST(BST* bst) {
-	//calls recursive function to release all notes
+	//calls recursive function to release all nodes
 	destroyREC(bst->root);
 	//sets root to empty
 	bst->root = NULL;
@@ -83,76 +85,112 @@ void destroyREC(TreeNode* root) {
 	destroyREC(root->left);
 	destroyREC(root->right);
 
-	//free root on way back up from recursive function after reaching bottom leaf
+	//free root on way back up from recursive function after reaching end of tree
 	free(root);
 }
 
 int findIndexNFromLast(BST* bst, int N) {
 	int res, size;
-	size = howManyInTree(bst->root);
-	if (N > size || N <= 0) {
-		printf("not a viable number");
-		exit(1);
-	}
+
+	//case tree is empty
 	if (bst->root == NULL) {
-		printf("Empty tree");
-		exit(1);
+		printf("Empty tree, cannot find index from last number\n");
+		return -1;
 	}
+
+	//check how many nodes are in tree
+	size = howManyInTree(bst->root);
+
+	//if N is more than the numbers in the tree or less than or equal to zero, it's not a valid index
+	if (N > size || N <= 0) {
+		printf("%d is not a viable index\n", N);
+		return -1;
+	}
+
+	//find index from largest number in recursive function
 	findIndexNFromLastREC(bst->root, &N, &res);
+
+	//return index
 	return res;
 }
 
-int findIndexNFromLastREC(TreeNode* root, int* num, int* res) {
+void findIndexNFromLastREC(TreeNode* root, int* num, int* res) {
+	//end condition
 	if (root == NULL) return;
-	findIndexNFromLastREC(root->right ,num, res);
+
+	//reach bottom of tree
+	findIndexNFromLastREC(root->right, num, res);
+
+	//if our index has reached one, then we are at the nth largest node and save value
 	if (*num == 1) {
 		*res = root->element;
-		(*num)--;
+		//(*num)--;
 	}
+
+	//as we start to traverse back up, take the left branches as well
 	findIndexNFromLastREC(root->left, num, res);
+
+	//for every jump upward or to the left, decrement the index
 	(*num)--;
+
+	//again, if our index is one, we have reached the nth root
 	if (*num == 1) *res = root->element;
+
+	return;
+
 
 }
 
 int howManyInTree(TreeNode* root) {
+
+	//end condition
 	if (root == NULL) return 0;
-	return 1 + howManyInTree(root->left) +  howManyInTree(root->right);
+
+	//add one until we have traversed entire tree in recursive calls down right and left branches, return amount of nodes in tree
+	return 1 + howManyInTree(root->left) + howManyInTree(root->right);
 }
 
 int sameHeightLeaves(BST* bst) {
-	int temp = 0;
-	int* num;
-	num = &temp;
 
+	int num = 0;
+
+	//empty case
 	if (bst->root == NULL) {
-		printf("Empty tree");
-		exit(1);
+		printf("Empty tree, height is zero\n");
+		return -1;
 	}
 
-	sameHeightLeavesREC(bst->root, num, 0);
-	if (*num == -1) return 0;
+	//call recursive function to calculate same height
+	sameHeightLeavesREC(bst->root, &num, 0);
+
+	//if height isn't the same return 0
+	if (num == -1) return 0;
+
+	//if the same return 1
 	else return 1;
-
-
 }
 
 void sameHeightLeavesREC(TreeNode* root, int* num, int steps) {
+	//if we have reached the end of a branch
 	if (root->left == NULL && root->right == NULL) {
+		//if this is the first time, set number to steps
 		if (*num == 0) {
 			*num = steps;
 		}
 		else {
+			//otherwise, if we have reached another bottom branch compare it to old ones, if unequal, return -1
 			if (steps != *num)
 				*num = -1;
 		}
 		return;
 	}
+	//go down to the left
 	if (root->left != NULL) {
-		sameHeightLeavesREC(root->left, num, steps+1);
+		sameHeightLeavesREC(root->left, num, steps + 1);
 	}
+	//go down to the right
 	if (root->right != NULL) {
-		sameHeightLeavesREC(root->right, num, steps+1);
+		sameHeightLeavesREC(root->right, num, steps + 1);
 	}
 }
 

@@ -1,4 +1,5 @@
-#ifndef _BST_ADT_H
+#ifndef _BST_ADT_H //if _BST_ADT_H has not been previously defined in code, then do so
+
 #define _BST_ADT_H
 
 typedef struct TreeNode TreeNode;
@@ -23,7 +24,7 @@ void inOrder(TreeNode* root);
 void destroyBST(BST* bst);
 void destroyREC(TreeNode* root);
 int findIndexNFromLast(BST* bst, int N);
-int findIndexNFromLastREC(TreeNode* root, int* num, int* res);
+void findIndexNFromLastREC(TreeNode* root, int* num, int* res);
 int howManyInTree(TreeNode* root);
 int sameHeightLeaves(BST* bst);
 void sameHeightLeavesREC(TreeNode* root, int* num, int steps);
